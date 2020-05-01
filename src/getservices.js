@@ -1,8 +1,6 @@
 import React from 'react';  
-//import { connect } from 'react-redux'
 import { Table,Button } from 'react-bootstrap';  
 import axios from 'axios';  
-//import App from './App';
 class ServicesList extends React.Component{  
     constructor(props){  
         super(props);  
