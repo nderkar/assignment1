@@ -9,8 +9,7 @@ class ServicesList extends React.Component{
            servicearray:[]  ,
            providerarray:[]      
         }  
-    }  
-  
+    }    
     
     componentDidMount(){  
      
