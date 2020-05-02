@@ -53,6 +53,10 @@ class ServicesList extends React.Component{
            </div>
            <div  style={{float:"left" , padding:5 , width:400 }}> 
            <p>{props.attributes.name}</p>
+           <p>Subspecialties:</p>
+           {props.attributes.subspecialties.map(subspecialty => (  
+                        <h5>{subspecialty}</h5> 
+                        ))}  
            <p>{props.attributes.affiliation}</p>
            <Fragment>
            {ReactHtmlParser(props.attributes.bio)}
