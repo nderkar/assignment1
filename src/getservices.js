@@ -12,6 +12,7 @@ class ServicesList extends React.Component{
         this.state = {  
            error:null,  
            servicearray:[]  ,
+           service:null,
            providerarray:[]    ,
            provider:null  
         }  
@@ -42,7 +43,10 @@ class ServicesList extends React.Component{
                 this.setState({error});  
             }); 
     };
-    showDetails(props) {  
+    setSelectedServiceState(props) {  
+        this.setState({ service: props }); 
+      }  
+    setSelectedProviderState(props) {  
         this.setState({ provider: props }); 
       }  
       showProviderDetails = (props) => {
@@ -79,24 +83,21 @@ class ServicesList extends React.Component{
         {  
             return(  
                 <div>  
-                      
-                  <Table>  
-                    <thead className="btn-primary">  
-                      <tr>  
-                        <th>Service Name</th>  
-                        
-                      </tr>  
-                    </thead>  
-                    <tbody>  
-                    {servicearray.map(service => (  
-                        <tr key={service.id}>  
                    
-                          <td>{service.id}</td>  
-                         
-                        </tr>  
+                  <div>
+                      <div className="btn-primary" style={{padding:5}} >
+                       
+                        <h4>Service Name</h4>
+                        <div style={{backgroundColor: "white" , padding:10 ,margin:5 }} >
+                        {servicearray.map(myservice => (  
+                        <p><Button variant="outline-primary" onClick={() => this.setSelectedServiceState(myservice)}>{myservice.id}</Button>{' '}</p>   
+                       
                         ))}  
-                    </tbody>  
-                  </Table>  
+                        </div>  
+                        
+                      </div>
+                     
+                  </div>
 
                   <div>
                       <div className="btn-primary" style={{padding:5}} >
@@ -104,7 +105,7 @@ class ServicesList extends React.Component{
                         <h4>Provider Name</h4>
                         <div style={{backgroundColor: "white",float:"left" , padding:10 ,margin:5 }} >
                         {providerarray.map(provider => (  
-                        <p><Button variant="outline-primary" onClick={() => this.showDetails(provider)}>{provider.id}</Button>{' '}</p>   
+                        <p><Button variant="outline-primary" onClick={() => this.setSelectedProviderState(provider)}>{provider.id}</Button>{' '}</p>   
                        
                         ))}  
                         </div>  
