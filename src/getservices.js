@@ -14,8 +14,10 @@ class ServicesList extends React.Component{
            servicearray:[]  ,
            service:null,
            providerarray:[]    ,
-           provider:null  
-        }  
+           provider:null,
+           isserviceprovider:null  
+        };
+        
     }  
   
     
@@ -45,16 +47,54 @@ class ServicesList extends React.Component{
     };
     setSelectedServiceState(props) {  
         this.setState({ service: props }); 
+        this.setState({ isserviceprovider: null });  
+        this.setState({ provider: null });  
       }  
     setSelectedProviderState(props) {  
         this.setState({ provider: props }); 
       } 
       
-      showProvider = (selectedService,myprovider) => {
+      showProvider = (myprovider) => {        
         return (
-      <p><Button variant="outline-primary" onClick={() => this.setSelectedProviderState(myprovider)}>{myprovider.id}</Button>{' '}</p>   
+            this.state.service ?
+
+                this.showServiceProviderRow(myprovider,this)
+        
+            :
+            
+                this.showProviderRow(myprovider) 
+           
       );
-    }           
+    }
+    showProviderRow = (myprovider) => {
+        return (
+        <p><Button variant="outline-primary" onClick={() => this.setSelectedProviderState(myprovider)}>{myprovider.attributes.name}</Button>{' '}</p>
+               
+            );
+      }   
+      showServiceProviderRow= (myprovider,thisobj) => {
+        
+        this.showServiceProviders(myprovider,thisobj);
+        if(this.state.isserviceprovider == 'true')        
+        {
+            return thisobj.showProviderRow(myprovider) ; 
+        }
+        else
+        {
+            return '';
+        }       
+        
+      }
+
+      showServiceProviders = (myprovider,thisobj) => {           
+         
+        myprovider.relationships.schedules.data.map(schedule => (
+            
+            this.checkServiceProviders(schedule, thisobj)   
+           
+        )); 
+         
+      };     
       showProviderDetails = (props) => {
         return (
             <div  style={{float:"left" , padding:10 }}>
@@ -77,9 +117,21 @@ class ServicesList extends React.Component{
              </div>
           );
       }
+    checkServiceProviders(schedule, thisobj) {        
+        return axios.get('https://api.inquickerstaging.com/v3/winter.inquickerstaging.com/schedules/' + schedule.id)
+            .then(function (response) {
+                if (response.data.data.attributes.service.toString().toLowerCase() == thisobj.state.service.attributes.name.toString().toLowerCase()) {
+                    thisobj.setState({ isserviceprovider: 'true' });
+                }
+            })
+            .catch(function (error) {
+            });
+    }
+
     render(){        
 
         const{error,servicearray,providerarray}=this.state;  
+        
         if(error){  
             return(  
                 <div>Error:{error.message}</div>  
@@ -96,7 +148,7 @@ class ServicesList extends React.Component{
                         <h4>Service Name</h4>
                         <div style={{backgroundColor: "white" , padding:10 ,margin:5 }} >
                         {servicearray.map(myservice => (  
-                        <p><Button variant="outline-primary" onClick={() => this.setSelectedServiceState(myservice)}>{myservice.id}</Button>{' '}</p>   
+                        <p><Button variant="outline-primary" onClick={() => this.setSelectedServiceState(myservice)}>{myservice.attributes.name}</Button>{' '}</p>   
                        
                         ))}  
                         </div>  
@@ -111,7 +163,7 @@ class ServicesList extends React.Component{
                         <h4>Provider Name</h4>
                         <div style={{backgroundColor: "white",float:"left" , padding:10 ,margin:5 }} >
                         {providerarray.map(myprovider => (  
-                            this.showProvider(this.state.service,myprovider) 
+                            this.showProvider(myprovider) 
                        
                         ))}  
                         </div>  
