@@ -48,7 +48,13 @@ class ServicesList extends React.Component{
       }  
     setSelectedProviderState(props) {  
         this.setState({ provider: props }); 
-      }  
+      } 
+      
+      showProvider = (selectedService,myprovider) => {
+        return (
+      <p><Button variant="outline-primary" onClick={() => this.setSelectedProviderState(myprovider)}>{myprovider.id}</Button>{' '}</p>   
+      );
+    }           
       showProviderDetails = (props) => {
         return (
             <div  style={{float:"left" , padding:10 }}>
@@ -104,8 +110,8 @@ class ServicesList extends React.Component{
                        
                         <h4>Provider Name</h4>
                         <div style={{backgroundColor: "white",float:"left" , padding:10 ,margin:5 }} >
-                        {providerarray.map(provider => (  
-                        <p><Button variant="outline-primary" onClick={() => this.setSelectedProviderState(provider)}>{provider.id}</Button>{' '}</p>   
+                        {providerarray.map(myprovider => (  
+                            this.showProvider(this.state.service,myprovider) 
                        
                         ))}  
                         </div>  
